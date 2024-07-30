@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  huntLogs  HuntLog[]
+}
+
+model Monstro {
+  id          Int           @id @default(autoincrement())
+  nome        String
+  monstrosItens MonstroItem[]
+  monstrosHunts MonstroHunt[]
+}
+
+model Item {
+  id          Int           @id @default(autoincrement())
+  nome        String
+  preco       Int
+  monstrosItens MonstroItem[]
+}
+
+model Hunt {
+  id          Int           @id @default(autoincrement())
+  nome        String
+  monstrosHunts MonstroHunt[]
+}
+
+model MonstroItem {
+  monstro_id  Int     @map("monstro_id")
+  item_id     Int     @map("item_id")
+
+  @@id([monstro_id, item_id])
+
+  Monstro     Monstro @relation(fields: [monstro_id], references: [id])
+  Item        Item    @relation(fields: [item_id], references: [id])
+}
+
+model MonstroHunt {
+  monstro_id  Int     @map("monstro_id")
+  hunt_id     Int     @map("hunt_id")
+
+  @@id([monstro_id, hunt_id])
+
+  Monstro     Monstro @relation(fields: [monstro_id], references: [id])
+  Hunt        Hunt    @relation(fields: [hunt_id], references: [id])
+}
+
+model HuntLog {
+  id           Int       @id @default(autoincrement())
+  hunt_id      Int
+  hunt_name    String
+  total_lucro  Float
+  data         DateTime
+  created_at   DateTime @default(now())
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id])
+}
