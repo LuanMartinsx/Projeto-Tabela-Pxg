@@ -7,6 +7,7 @@ interface imagemProps {
     alt: any
 }
 
+// componente para carregar imagem
 export default function Imagem(props: imagemProps) {
     return (
         <div>

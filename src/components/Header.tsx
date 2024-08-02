@@ -3,6 +3,7 @@ interface HeaderProps {
   tituloHeader?: React.ReactNode;
 }
 
+// componente header que ainda não foi muito utilizado
 export default function Header(props: HeaderProps) {
   return (
     <header className="flex items-center justify-between bg-gradient-to-r from-purple-700 to-zinc-900 p-4">
